@@ -1,0 +1,23 @@
+{
+    "name": "Проклятие Зомби-Фермы",
+    "short_name": "ZombieFarm",
+    "description": "Увлекательный квест-игра о спасении фермы от зомби-вируса",
+    "version": "1.0.0",
+    "manifest_version": 1,
+    "theme_color": "#667eea",
+    "background_color": "#764ba2",
+    "display": "fullscreen",
+    "start_url": "/",
+    "icons": [
+        {
+            "src": "assets/images/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/images/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

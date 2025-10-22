@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проклятие Зомби-Фермы</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="app">
+        <!-- Экран загрузки -->
+        <div id="loading-screen" class="screen active">
+            <div class="loader">
+                <div class="zombie-loader">🧟</div>
+                <p>Загружаем ферму...</p>
+            </div>
+        </div>
+
+        <!-- Главное меню -->
+        <div id="main-menu" class="screen">
+            <div class="menu-container">
+                <h1>🧟 ПРОКЛЯТИЕ ЗОМБИ-ФЕРМЫ</h1>
+                <div class="menu-buttons">
+                    <button id="start-game" class="btn-primary">🎮 НАЧАТЬ ИГРУ</button>
+                    <button id="how-to-play" class="btn-secondary">📚 КАК ИГРАТЬ</button>
+                    <button id="leaderboard" class="btn-secondary">🏆 ТАБЛИЦА ЛИДЕРОВ</button>
+                </div>
+                <div class="player-info">
+                    <p>Игрок: <span id="player-name">...</span></p>
+                    <p>Рекорд: <span id="player-score">0</span> очков</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Игровой экран -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="game-stats">
+                    <span>Этап: <span id="current-stage">1</span>/13</span>
+                    <span>Очки: <span id="score">0</span></span>
+                    <span>Время: <span id="timer">45:00</span></span>
+                </div>
+                <button id="pause-btn" class="btn-small">⏸️</button>
+            </div>
+
+            <div class="game-content">
+                <div id="stage-content" class="stage-content">
+                    <!-- Контент этапа будет загружаться здесь -->
+                </div>
+                
+                <div class="input-section">
+                    <input type="text" id="answer-input" placeholder="Введите ответ...">
+                    <button id="submit-answer" class="btn-primary">ПРОВЕРИТЬ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Экран паузы -->
+        <div id="pause-screen" class="screen overlay">
+            <div class="pause-menu">
+                <h2>⏸️ ПАУЗА</h2>
+                <button id="resume-game" class="btn-primary">ПРОДОЛЖИТЬ</button>
+                <button id="restart-game" class="btn-secondary">ЗАНОВО</button>
+                <button id="quit-game" class="btn-danger">ВЫЙТИ</button>
+            </div>
+        </div>
+
+        <!-- Экран результатов -->
+        <div id="results-screen" class="screen">
+            <div class="results-container">
+                <h2>🎉 ФЕРМА СПАСЕНА!</h2>
+                <div class="results-stats">
+                    <p>Этапов пройдено: <span id="final-stages">0</span>/13</p>
+                    <p>Набрано очков: <span id="final-score">0</span></p>
+                    <p>Осталось времени: <span id="final-time">0:00</span></p>
+                </div>
+                <div class="results-buttons">
+                    <button id="play-again" class="btn-primary">ИГРАТЬ СНОВА</button>
+                    <button id="share-result" class="btn-secondary">ПОДЕЛИТЬСЯ</button>
+                    <button id="back-to-menu" class="btn-secondary">МЕНЮ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
