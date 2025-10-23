@@ -1,215 +1,307 @@
-// Данные этапов (полная версия)
+// Минимальная версия для отладки
+console.log("🚀 Запуск игры...");
+
+// Глобальные переменные
+let tg = null;
+let gameState = {
+    currentStage: 1,
+    score: 0,
+    timeLeft: 2700,
+    timerInterval: null,
+    isGameActive: false
+};
+
+// Простые этапы для теста
 const stages = {
     1: {
         title: "🍎 ЭТАП 1: ЗАРАЖЕНИЕ",
-        description: "Безумный ученый Агриус провел неудачный эксперимент! Все животные на ферме стали зомби. Найдите зараженное яблоко с кодом.",
-        task: "Отсканируйте QR-код на входе и найдите яблоко с кодом",
-        hint: "Код состоит из слова и года через нижнее подчеркивание",
-        fact: "Интересный факт: Первые фермы появились около 12 000 лет назад!",
+        description: "Найдите зараженное яблоко с кодом.",
+        task: "Код: ЗАРАЖЕНИЕ_2024",
         answer: "ЗАРАЖЕНИЕ_2024",
         points: 100
     },
     2: {
-        title: "🥚 ЭТАП 2: ТАЙНА ЗОМБИ-ЯИЦ",
-        description: "Зомби-куры снесли яйца со странными символами! Найдите все яйца и расшифруйте код.",
-        task: "Найдите 5 яиц с символами в курятнике",
-        hint: "Символы: Ω † ∞ ¤ § (введите их подряд)",
-        fact: "Куры могут запомнить до 100 разных лиц!",
+        title: "🥚 ЭТАП 2: ТАЙНА ЯИЦ", 
+        description: "Расшифруйте символы на яйцах.",
+        task: "Символы: Ω†∞¤§",
         answer: "Ω†∞¤§",
         points: 150
-    },
-    3: {
-        title: "🦢 ЭТАП 3: ГУСИНОЕ СЕЛФИ",
-        description: "Пройдите через территорию гусей-охранников и сделайте крутое селфи!",
-        task: "Сделайте селфи с гусями и поделитесь в соцсетях",
-        hint: "Используйте хэштег #ЗомбиФерма2024",
-        fact: "Гуси образуют пары на всю жизнь!",
-        answer: "ГУСИ_ОХРАННИКИ",
-        points: 200
-    },
-    4: {
-        title: "🦙 ЭТАП 4: ТАЙНА ЛАМЫ",
-        description: "Лама на ферме знает секрет! Но она говорит только на языке жестов.",
-        task: "Расшифруйте жесты ламы и найдите код",
-        hint: "Код: 4 цифры (год основания фермы)",
-        fact: "Ламы используются как сторожевые животные для охраны овец!",
-        answer: "1998",
-        points: 250
-    },
-    5: {
-        title: "🦘 ЭТАП 5: ПРЫГАЮЩИЙ КЕНГУРУ",
-        description: "Кенгуру-зомби прыгает по ферме и оставляет следы! Проследите за ним.",
-        task: "Найдите все места, где прыгал кенгуру",
-        hint: "Количество прыжков = код",
-        fact: "Кенгуру не могут двигать задними лапами независимо друг от друга!",
-        answer: "7",
-        points: 300
-    },
-    6: {
-        title: "🐄 ЭТАП 6: МОЛОКО ЗОМБИ",
-        description: "Коровы дают зараженное молоко! Найдите антидот в молочном цеху.",
-        task: "Решите головоломку с бутылками молока",
-        hint: "Код: цвет бутылки + номер",
-        fact: "Корова может узнать до 50 других коров!",
-        answer: "ЗЕЛЕНЫЙ7",
-        points: 350
-    },
-    7: {
-        title: "🐑 ЭТАП 7: ОВЕЧЬЯ ШЕРСТЬ",
-        description: "Овцы стали агрессивными! Успокойте их, найдя правильный подход.",
-        task: "Посчитайте количество белых и черных овец",
-        hint: "Код: белые_черные (например: 12_8)",
-        fact: "Овцы имеют поле зрения 270 градусов!",
-        answer: "15_10",
-        points: 400
-    },
-    8: {
-        title: "📱 ЭТАП 8: ТЕХНОЛОГИИ",
-        description: "Найдите планшет с данными эксперимента! Взломайте пароль.",
-        task: "Решите цифровую головоломку",
-        hint: "Пароль: дата эксперимента (дд.мм.гггг)",
-        fact: "Первые смартфоны появились в 1992 году!",
-        answer: "15.03.2024",
-        points: 450
-    },
-    9: {
-        title: "🧩 ЭТАП 9: ПАЗЛ ЛАБОРАТОРИИ",
-        description: "Соберите пазл с планом лаборатории! Найдите скрытое сообщение.",
-        task: "Соберите пазл из 12 частей",
-        hint: "Код: первые буквы слов на пазле",
-        fact: "Самый большой пазл в мире состоит из 551,232 деталей!",
-        answer: "СПАСИТЕФЕРМУ",
-        points: 500
-    },
-    10: {
-        title: "🔦 ЭТАП 10: НОЧНАЯ ОХОТА",
-        description: "Ночью зомби-животные активнее! Найдите их с фонариком.",
-        task: "Найдите 5 спрятанных предметов ночью",
-        hint: "Код: количество найденных предметов",
-        fact: "Многие животные видят в темноте в 6 раз лучше человека!",
-        answer: "5",
-        points: 550
-    },
-    11: {
-        title: "🧪 ЭТАП 11: ЛАБОРАТОРИЯ",
-        description: "Проберитесь в лабораторию Агриуса! Создайте антидот.",
-        task: "Смешайте правильные ингредиенты",
-        hint: "Код: формула антидота (например: A+B+C)",
-        fact: "Первый антибиотик был открыт в 1928 году!",
-        answer: "ЗЕЛЕНЬ+КРАСНЫЙ+СИНИЙ",
-        points: 600
-    },
-    12: {
-        title: "🎭 ЭТАП 12: МАСКАРАД",
-        description: "Агриус спрятался среди зомби! Найдите его по особенностям.",
-        task: "Найдите отличия у настоящего Агриуса",
-        hint: "Код: количество отличий",
-        fact: "Искусство маскировки существует тысячи лет!",
-        answer: "3",
-        points: 650
-    },
-    13: {
-        title: "🏆 ЭТАП 13: ФИНАЛЬНАЯ БИТВА",
-        description: "Последнее противостояние с Агриусом! Используйте антидот.",
-        task: "Введите финальный код для спасения фермы",
-        hint: "Код: общее количество животных на ферме",
-        fact: "Ферма спасена! Вы стали героем!",
-        answer: "42",
-        points: 1000
     }
 };
-function endGame() {
-    stopGame();
+
+// Основная функция инициализации
+function initializeApp() {
+    console.log("🔧 Инициализация приложения...");
+    
+    try {
+        // Инициализация Telegram Web App
+        if (window.Telegram && window.Telegram.WebApp) {
+            tg = window.Telegram.WebApp;
+            tg.expand();
+            console.log("✅ Telegram Web App инициализирован");
+        } else {
+            console.log("⚠️ Telegram Web App не найден, работаем в браузере");
+        }
+        
+        // Показываем главное меню через 1 секунду
+        setTimeout(() => {
+            hideScreen('loading');
+            showScreen('main');
+            console.log("✅ Главное меню показано");
+        }, 1000);
+        
+        // Настраиваем обработчики событий
+        setupEventListeners();
+        
+    } catch (error) {
+        console.error("❌ Ошибка инициализации:", error);
+        // Принудительно показываем главное меню при ошибке
+        hideScreen('loading');
+        showScreen('main');
+    }
+}
+
+// Управление экранами
+function showScreen(screenId) {
+    console.log("🖥 Показываем экран:", screenId);
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
+    document.getElementById(screenId).classList.add('active');
+}
+
+function hideScreen(screenId) {
+    document.getElementById(screenId).classList.remove('active');
+}
+
+// Настройка обработчиков событий
+function setupEventListeners() {
+    console.log("🔗 Настраиваем обработчики...");
+    
+    // Главное меню
+    const startBtn = document.getElementById('start-btn');
+    const howToPlayBtn = document.getElementById('how-to-play-btn');
+    
+    if (startBtn) {
+        startBtn.addEventListener('click', startGame);
+        console.log("✅ Обработчик для start-btn установлен");
+    }
+    
+    if (howToPlayBtn) {
+        howToPlayBtn.addEventListener('click', showInstructions);
+        console.log("✅ Обработчик для how-to-play-btn установлен");
+    }
+    
+    // Игровой экран
+    const backBtn = document.getElementById('back-btn');
+    const submitAnswer = document.getElementById('submit-answer');
+    const answerInput = document.getElementById('answer-input');
+    const backFromInstructions = document.getElementById('back-from-instructions');
+    
+    if (backBtn) backBtn.addEventListener('click', showMainMenu);
+    if (submitAnswer) submitAnswer.addEventListener('click', checkAnswer);
+    if (backFromInstructions) backFromInstructions.addEventListener('click', showMainMenu);
+    
+    // Enter для отправки ответа
+    if (answerInput) {
+        answerInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkAnswer();
+        });
+    }
+    
+    console.log("✅ Все обработчики настроены");
+}
+
+// Игровые функции
+function startGame() {
+    console.log("🎮 Начинаем новую игру");
+    
+    gameState = {
+        currentStage: 1,
+        score: 0,
+        timeLeft: 2700,
+        isGameActive: true
+    };
+    
+    showScreen('game');
+    loadStage(1);
+    updateStats();
+}
+
+function showMainMenu() {
+    console.log("🏠 Возврат в главное меню");
+    if (gameState.isGameActive) {
+        clearInterval(gameState.timerInterval);
+        gameState.isGameActive = false;
+    }
+    showScreen('main');
+}
+
+function showInstructions() {
+    console.log("📚 Показываем инструкции");
+    showScreen('instructions');
+}
+
+function loadStage(stageNumber) {
+    console.log("📖 Загружаем этап:", stageNumber);
+    
+    const stage = stages[stageNumber];
+    if (!stage) {
+        endGame();
+        return;
+    }
     
     const stageContent = document.getElementById('stage-content');
-    const totalStages = Object.keys(stages).length;
-    const completedStages = gameState.currentStage - 1;
-    const completionPercent = Math.round((completedStages / totalStages) * 100);
-    
-    let title, message;
-    if (completedStages === totalStages) {
-        title = "🎉 ПОБЕДА!";
-        message = "Вы полностью спасли ферму от зомби-вируса!";
-    } else if (completedStages >= totalStages * 0.7) {
-        title = "🥈 ОТЛИЧНЫЙ РЕЗУЛЬТАТ!";
-        message = "Вы спасли большую часть фермы!";
-    } else if (completedStages >= totalStages * 0.4) {
-        title = "🥉 ХОРОШАЯ ПОПЫТКА!";
-        message = "Вы спасли часть животных!";
-    } else {
-        title = "💪 ПРОДОЛЖАЙТЕ БОРОТЬСЯ!";
-        message = "Ферма еще нуждается в вашей помощи!";
+    if (!stageContent) {
+        console.error("❌ Элемент stage-content не найден");
+        return;
     }
     
     stageContent.innerHTML = `
-        <div class="game-complete">
-            <h2>${title}</h2>
-            <p>${message}</p>
-            
-            <div class="final-stats">
-                <div class="stat-item">
-                    <span>🎯 Пройдено этапов:</span>
-                    <span>${completedStages}/${totalStages} (${completionPercent}%)</span>
-                </div>
-                <div class="stat-item">
-                    <span>🏆 Набрано очков:</span>
-                    <span>${gameState.score}</span>
-                </div>
-                <div class="stat-item">
-                    <span>⭐ Рейтинг:</span>
-                    <span>${getRating(gameState.score)}</span>
-                </div>
-            </div>
-            
-            <div class="progress-bar" style="margin: 20px 0;">
-                <div class="progress-fill" style="width: ${completionPercent}%"></div>
-            </div>
-            
-            <div class="results-buttons">
-                <button onclick="startGame()" class="btn-primary">🔄 ИГРАТЬ СНОВА</button>
-                <button onclick="showMainMenu()" class="btn-secondary">🏠 ГЛАВНОЕ МЕНЮ</button>
-                <button onclick="shareResults()" class="btn-secondary">📤 ПОДЕЛИТЬСЯ</button>
-            </div>
+        <div class="stage-header">
+            <h3>${stage.title}</h3>
+            <p>${stage.description}</p>
+        </div>
+        <div class="stage-task">
+            <h4>🎯 Задача:</h4>
+            <p>${stage.task}</p>
+        </div>
+        <div class="input-section">
+            <input type="text" id="answer-input" placeholder="Введите ответ..." value="">
+            <button id="submit-answer" class="btn-primary">ПРОВЕРИТЬ</button>
         </div>
     `;
     
-    // Отправляем данные в Telegram
-    tg.sendData(JSON.stringify({
-        action: 'game_complete',
-        score: gameState.score,
-        stages: completedStages,
-        total_stages: totalStages,
-        rating: getRating(gameState.score)
-    }));
-}
-
-function getRating(score) {
-    if (score >= 5000) return "🧙‍♂️ ЛЕГЕНДА ФЕРМЫ";
-    if (score >= 4000) return "🏆 МАСТЕР СПАСЕНИЯ";
-    if (score >= 3000) return "⭐ ГЕРОЙ ФЕРМЫ";
-    if (score >= 2000) return "👍 ОПЫТНЫЙ ФЕРМЕР";
-    if (score >= 1000) return "🌱 НАЧИНАЮЩИЙ";
-    return "🎯 НОВИЧОК";
-}
-
-function shareResults() {
-    const results = {
-        score: gameState.score,
-        stages: gameState.currentStage - 1,
-        total: Object.keys(stages).length
-    };
+    // Обновляем обработчики для нового контента
+    const newSubmitAnswer = document.getElementById('submit-answer');
+    const newAnswerInput = document.getElementById('answer-input');
     
-    const shareText = `Я прошел(а) ${results.stages} из ${results.total} этапов в игре "Зомби-Ферма" и набрал(а) ${results.score} очков! 🧟🏆\n\nПрисоединяйся: ${WEBAPP_URL}`;
-    
-    if (navigator.share) {
-        navigator.share({
-            title: 'Мой результат в Зомби-Ферме',
-            text: shareText,
-            url: WEBAPP_URL
-        });
-    } else {
-        navigator.clipboard.writeText(shareText).then(() => {
-            showMessage('📋 Результат скопирован! Поделитесь с друзьями!', 'success');
-        });
+    if (newSubmitAnswer) {
+        newSubmitAnswer.addEventListener('click', checkAnswer);
     }
+    
+    if (newAnswerInput) {
+        newAnswerInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkAnswer();
+        });
+        newAnswerInput.focus();
+    }
+    
+    document.getElementById('current-stage').textContent = stageNumber;
+    updateStats();
+}
+
+function checkAnswer() {
+    console.log("🔍 Проверяем ответ...");
+    
+    const input = document.getElementById('answer-input');
+    if (!input) {
+        console.error("❌ Поле ввода не найдено");
+        return;
+    }
+    
+    const userAnswer = input.value.trim();
+    const currentStage = stages[gameState.currentStage];
+    
+    if (!userAnswer) {
+        showMessage('Введите ответ!', 'error');
+        return;
+    }
+    
+    if (userAnswer.toUpperCase() === currentStage.answer) {
+        // Правильный ответ
+        gameState.score += currentStage.points;
+        gameState.currentStage++;
+        
+        showMessage('✅ Правильно! Переходим дальше!', 'success');
+        
+        setTimeout(() => {
+            if (gameState.currentStage <= Object.keys(stages).length) {
+                loadStage(gameState.currentStage);
+            } else {
+                endGame();
+            }
+            updateStats();
+        }, 1500);
+        
+    } else {
+        // Неправильный ответ
+        showMessage('❌ Неправильно! Попробуйте еще раз.', 'error');
+        input.value = '';
+        input.focus();
+    }
+}
+
+function showMessage(text, type) {
+    console.log("💬 Показываем сообщение:", text);
+    
+    const message = document.createElement('div');
+    message.className = `message ${type}`;
+    message.textContent = text;
+    message.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px 30px;
+        border-radius: 10px;
+        z-index: 1000;
+        font-weight: bold;
+        background: ${type === 'success' ? '#48bb78' : '#f56565'};
+        color: white;
+        text-align: center;
+        min-width: 250px;
+    `;
+    
+    document.body.appendChild(message);
+    
+    setTimeout(() => {
+        if (message.parentNode) {
+            message.parentNode.removeChild(message);
+        }
+    }, 2000);
+}
+
+function updateStats() {
+    const stageCounter = document.getElementById('stage-counter');
+    const scoreCounter = document.getElementById('score-counter');
+    
+    if (stageCounter) {
+        stageCounter.textContent = `${gameState.currentStage - 1}/${Object.keys(stages).length}`;
+    }
+    
+    if (scoreCounter) {
+        scoreCounter.textContent = gameState.score;
+    }
+}
+
+function endGame() {
+    console.log("🎉 Завершаем игру");
+    
+    clearInterval(gameState.timerInterval);
+    gameState.isGameActive = false;
+    
+    const stageContent = document.getElementById('stage-content');
+    if (stageContent) {
+        stageContent.innerHTML = `
+            <div class="game-complete">
+                <h2>🎉 Игра завершена!</h2>
+                <p>Вы прошли ${gameState.currentStage - 1} из ${Object.keys(stages).length} этапов!</p>
+                <p>🏆 Очков: ${gameState.score}</p>
+                <button onclick="showMainMenu()" class="btn-primary">В ГЛАВНОЕ МЕНЮ</button>
+            </div>
+        `;
+    }
+}
+
+// Запускаем приложение когда DOM загружен
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("📄 DOM загружен");
+    initializeApp();
+});
+
+// Если DOM уже загружен, запускаем сразу
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    console.log("⚡ DOM уже готов");
+    setTimeout(initializeApp, 0);
 }
