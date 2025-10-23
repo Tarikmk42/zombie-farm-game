@@ -3,18 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧟 Проклятие Зомби-Фермы</title>
-    <meta name="description" content="Telegram Mini App - увлекательный квест по спасению фермы от зомби">
-    
-    <!-- Telegram Web App -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
-    <!-- Стили -->
+    <title>🧟 Зомби-Ферма</title>
     <link rel="stylesheet" href="style.css">
-    
-    <!-- PWA -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#667eea">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
     <div class="app">
@@ -24,14 +15,15 @@
                 <div class="zombie-icon">🧟</div>
                 <h2>Загружаем ферму...</h2>
                 <div class="loader"></div>
+                <p id="loading-status">Инициализация...</p>
             </div>
         </div>
 
-        <!-- Главный экран -->
+        <!-- Главное меню -->
         <div id="main" class="screen">
             <div class="container">
                 <header>
-                    <h1>🧟 ПРОКЛЯТИЕ ЗОМБИ-ФЕРМЫ</h1>
+                    <h1>🧟 ЗОМБИ-ФЕРМА</h1>
                     <p>Спаси ферму от зомби-вируса!</p>
                 </header>
                 
@@ -39,7 +31,7 @@
                     <div class="game-stats">
                         <div class="stat">
                             <span>🎯 Этапы:</span>
-                            <span id="stage-counter">0/13</span>
+                            <span id="stage-counter">0/2</span>
                         </div>
                         <div class="stat">
                             <span>🏆 Очки:</span>
@@ -48,8 +40,8 @@
                     </div>
 
                     <div class="game-content">
-                        <h2>Добро пожаловать на ферму!</h2>
-                        <p>Безумный ученый превратил всех животных в зомби. Тебе предстоит пройти 13 этапов чтобы найти антидот!</p>
+                        <h2>Добро пожаловать!</h2>
+                        <p>Пройди этапы и спаси животных!</p>
                         
                         <div class="actions">
                             <button id="start-btn" class="btn-primary">🎮 НАЧАТЬ ИГРУ</button>
@@ -64,25 +56,19 @@
         <div id="game" class="screen">
             <div class="container">
                 <header class="game-header">
-                    <button id="back-btn" class="btn-small">⬅️</button>
+                    <button id="back-btn" class="btn-small">⬅️ Назад</button>
                     <h2>Этап <span id="current-stage">1</span></h2>
-                    <div class="timer">⏱ <span id="time">45:00</span></div>
                 </header>
 
                 <main>
                     <div id="stage-content">
-                        <!-- Контент этапов будет загружаться здесь -->
-                    </div>
-                    
-                    <div class="input-section">
-                        <input type="text" id="answer-input" placeholder="Введите код ответа...">
-                        <button id="submit-answer" class="btn-primary">ПРОВЕРИТЬ</button>
+                        <!-- Контент этапов будет здесь -->
                     </div>
                 </main>
             </div>
         </div>
 
-        <!-- Экран инструкции -->
+        <!-- Инструкции -->
         <div id="instructions" class="screen">
             <div class="container">
                 <header>
@@ -97,17 +83,7 @@
                     
                     <div class="instruction-item">
                         <h3>🔍 Прохождение этапов</h3>
-                        <p>Решай загадки, находи коды и вводи их в поле ответа</p>
-                    </div>
-                    
-                    <div class="instruction-item">
-                        <h3>⏱ Таймер</h3>
-                        <p>У тебя 45 минут чтобы спасти ферму!</p>
-                    </div>
-                    
-                    <div class="instruction-item">
-                        <h3>🏆 Очки</h3>
-                        <p>Зарабатывай очки за скорость и правильные ответы</p>
+                        <p>Решай загадки и вводи коды в поле ответа</p>
                     </div>
                     
                     <button id="back-from-instructions" class="btn-primary">ПОНЯТНО!</button>
