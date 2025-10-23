@@ -742,4 +742,143 @@ function saveHighScore() {
 
 function unlockAchievements() {
     // Здесь можно добавить логику разблокировки достижений
-    const
+    const unlocked = JSON.parse(localStorage.getItem('zombieFarmAchievements') || '[]');
+    
+    if (!unlocked.includes('explorer')) {
+        unlocked.push('explorer');
+        showNotification('🎉 Достижение разблокировано: Исследователь!', 'success');
+    }
+    
+    if (gameState.score >= 5000 && !unlocked.includes('hero')) {
+        unlocked.push('hero');
+        showNotification('🎉 Достижение разблокировано: Герой фермы!', 'success');
+    }
+    
+    localStorage.setItem('zombieFarmAchievements', JSON.stringify(unlocked));
+}
+
+// ===== УВЕДОМЛЕНИЯ =====
+function showNotification(message, type = 'info') {
+    const notification = document.getElementById('notification');
+    const notificationText = document.getElementById('notification-text');
+    
+    if (notification && notificationText) {
+        notificationText.textContent = message;
+        notification.className = `notification ${type} show`;
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+    
+    console.log(`💬 ${type.toUpperCase()}: ${message}`);
+}
+
+// ===== ОБРАБОТЧИКИ СОБЫТИЙ =====
+function setupEventListeners() {
+    console.log("🔗 Настраиваем обработчики событий...");
+    
+    // Главное меню
+    document.getElementById('start-game')?.addEventListener('click', showGameScreen);
+    document.getElementById('continue-game')?.addEventListener('click', showGameScreen);
+    document.getElementById('how-to-play')?.addEventListener('click', () => {
+        showNotification('📚 Проходите этапы, вводите коды и спасайте ферму!', 'info');
+    });
+    
+    // Игровой экран
+    document.getElementById('pause-btn')?.addEventListener('click', showPauseScreen);
+    document.getElementById('submit-answer')?.addEventListener('click', checkAnswer);
+    document.getElementById('hint-btn')?.addEventListener('click', useHint);
+    document.getElementById('skip-btn')?.addEventListener('click', skipStage);
+    
+    // Поле ввода ответа
+    const answerInput = document.getElementById('answer-input');
+    if (answerInput) {
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkAnswer();
+        });
+    }
+    
+    // Экран паузы
+    document.getElementById('resume-game')?.addEventListener('click', () => showScreen('game-screen'));
+    document.getElementById('restart-game')?.addEventListener('click', () => {
+        if (confirm('Начать игру заново?')) {
+            localStorage.removeItem('zombieFarmProgress');
+            showGameScreen();
+        }
+    });
+    document.getElementById('quit-to-menu')?.addEventListener('click', showMainMenu);
+    
+    // Экран результатов
+    document.getElementById('play-again')?.addEventListener('click', () => {
+        localStorage.removeItem('zombieFarmProgress');
+        showGameScreen();
+    });
+    document.getElementById('share-result')?.addEventListener('click', shareResults);
+    document.getElementById('back-to-menu-from-results')?.addEventListener('click', showMainMenu);
+    
+    // Модальные окна
+    document.querySelector('.modal-close')?.addEventListener('click', () => {
+        document.getElementById('hint-modal')?.classList.remove('active');
+    });
+    
+    // Закрытие модальных окон по клику вне области
+    window.addEventListener('click', (e) => {
+        const modals = document.querySelectorAll('.modal.active');
+        modals.forEach(modal => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+    });
+    
+    console.log("✅ Обработчики событий настроены");
+}
+
+// ===== ШЕРИНГ =====
+function shareResults() {
+    const results = {
+        score: gameState.score,
+        stages: gameState.currentStage - 1,
+        total: CONFIG.TOTAL_STAGES
+    };
+    
+    const shareText = `Я прошел(а) ${results.stages} из ${results.total} этапов в игре "Зомби-Ферма" и набрал(а) ${results.score} очков! 🧟🏆\n\nПрисоединяйся к спасательной операции!`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: 'Мой результат в Зомби-Ферме',
+            text: shareText
+        });
+    } else if (tg && tg.share) {
+        tg.share(shareText);
+    } else {
+        navigator.clipboard.writeText(shareText).then(() => {
+            showNotification('📋 Результат скопирован в буфер обмена!', 'success');
+        });
+    }
+}
+
+// ===== СЛУЖЕБНЫЕ ФУНКЦИИ =====
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+}
+
+function getRandomTip() {
+    const tips = [
+        "💡 Внимательно читайте описания этапов!",
+        "💡 Используйте подсказки экономно!",
+        "💡 Следите за временем!",
+        "💡 Не торопитесь - обдумайте ответ!",
+        "💡 Изучайте интересные факты о животных!"
+    ];
+    return tips[Math.floor(Math.random() * tips.length)];
+}
+
+// Экспортируем функции для глобального использования
+window.showMainMenu = showMainMenu;
+window.shareResults = shareResults;
+
+console.log("🎮 Игра Зомби-Ферма инициализирована и готова к работе!");
