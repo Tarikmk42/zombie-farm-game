@@ -278,3 +278,53 @@ body {
     background: #fed7d7 !important;
     color: #742a2a !important;
 }
+.game-complete {
+    text-align: center;
+    padding: 20px;
+}
+
+.final-stats {
+    background: #f7fafc;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 20px 0;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    font-size: 1.1rem;
+}
+
+.stat-item span:first-child {
+    font-weight: bold;
+    color: #4a5568;
+}
+
+.stat-item span:last-child {
+    font-weight: bold;
+    color: #2d3748;
+}
+
+.results-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #48bb78, #38a169);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
