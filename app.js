@@ -118,3 +118,98 @@ const stages = {
         points: 1000
     }
 };
+function endGame() {
+    stopGame();
+    
+    const stageContent = document.getElementById('stage-content');
+    const totalStages = Object.keys(stages).length;
+    const completedStages = gameState.currentStage - 1;
+    const completionPercent = Math.round((completedStages / totalStages) * 100);
+    
+    let title, message;
+    if (completedStages === totalStages) {
+        title = "🎉 ПОБЕДА!";
+        message = "Вы полностью спасли ферму от зомби-вируса!";
+    } else if (completedStages >= totalStages * 0.7) {
+        title = "🥈 ОТЛИЧНЫЙ РЕЗУЛЬТАТ!";
+        message = "Вы спасли большую часть фермы!";
+    } else if (completedStages >= totalStages * 0.4) {
+        title = "🥉 ХОРОШАЯ ПОПЫТКА!";
+        message = "Вы спасли часть животных!";
+    } else {
+        title = "💪 ПРОДОЛЖАЙТЕ БОРОТЬСЯ!";
+        message = "Ферма еще нуждается в вашей помощи!";
+    }
+    
+    stageContent.innerHTML = `
+        <div class="game-complete">
+            <h2>${title}</h2>
+            <p>${message}</p>
+            
+            <div class="final-stats">
+                <div class="stat-item">
+                    <span>🎯 Пройдено этапов:</span>
+                    <span>${completedStages}/${totalStages} (${completionPercent}%)</span>
+                </div>
+                <div class="stat-item">
+                    <span>🏆 Набрано очков:</span>
+                    <span>${gameState.score}</span>
+                </div>
+                <div class="stat-item">
+                    <span>⭐ Рейтинг:</span>
+                    <span>${getRating(gameState.score)}</span>
+                </div>
+            </div>
+            
+            <div class="progress-bar" style="margin: 20px 0;">
+                <div class="progress-fill" style="width: ${completionPercent}%"></div>
+            </div>
+            
+            <div class="results-buttons">
+                <button onclick="startGame()" class="btn-primary">🔄 ИГРАТЬ СНОВА</button>
+                <button onclick="showMainMenu()" class="btn-secondary">🏠 ГЛАВНОЕ МЕНЮ</button>
+                <button onclick="shareResults()" class="btn-secondary">📤 ПОДЕЛИТЬСЯ</button>
+            </div>
+        </div>
+    `;
+    
+    // Отправляем данные в Telegram
+    tg.sendData(JSON.stringify({
+        action: 'game_complete',
+        score: gameState.score,
+        stages: completedStages,
+        total_stages: totalStages,
+        rating: getRating(gameState.score)
+    }));
+}
+
+function getRating(score) {
+    if (score >= 5000) return "🧙‍♂️ ЛЕГЕНДА ФЕРМЫ";
+    if (score >= 4000) return "🏆 МАСТЕР СПАСЕНИЯ";
+    if (score >= 3000) return "⭐ ГЕРОЙ ФЕРМЫ";
+    if (score >= 2000) return "👍 ОПЫТНЫЙ ФЕРМЕР";
+    if (score >= 1000) return "🌱 НАЧИНАЮЩИЙ";
+    return "🎯 НОВИЧОК";
+}
+
+function shareResults() {
+    const results = {
+        score: gameState.score,
+        stages: gameState.currentStage - 1,
+        total: Object.keys(stages).length
+    };
+    
+    const shareText = `Я прошел(а) ${results.stages} из ${results.total} этапов в игре "Зомби-Ферма" и набрал(а) ${results.score} очков! 🧟🏆\n\nПрисоединяйся: ${WEBAPP_URL}`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: 'Мой результат в Зомби-Ферме',
+            text: shareText,
+            url: WEBAPP_URL
+        });
+    } else {
+        navigator.clipboard.writeText(shareText).then(() => {
+            showMessage('📋 Результат скопирован! Поделитесь с друзьями!', 'success');
+        });
+    }
+}
