@@ -1,259 +1,120 @@
-// Инициализация Telegram Web App
-const tg = window.Telegram.WebApp;
-
-// Состояние игры
-let gameState = {
-    currentStage: 1,
-    score: 0,
-    timeLeft: 2700, // 45 минут в секундах
-    timerInterval: null,
-    isGameActive: false
-};
-
-// Данные этапов (упрощенные для примера)
+// Данные этапов (полная версия)
 const stages = {
     1: {
-        title: "🍎 ЗАРАЖЕНИЕ",
+        title: "🍎 ЭТАП 1: ЗАРАЖЕНИЕ",
         description: "Безумный ученый Агриус провел неудачный эксперимент! Все животные на ферме стали зомби. Найдите зараженное яблоко с кодом.",
-        task: "🔍 Найдите яблоко с кодом на территории фермы",
-        hint: "💡 Код состоит из слова и года через нижнее подчеркивание",
+        task: "Отсканируйте QR-код на входе и найдите яблоко с кодом",
+        hint: "Код состоит из слова и года через нижнее подчеркивание",
+        fact: "Интересный факт: Первые фермы появились около 12 000 лет назад!",
         answer: "ЗАРАЖЕНИЕ_2024",
         points: 100
     },
     2: {
-        title: "🥚 ТАЙНА ЯИЦ",
+        title: "🥚 ЭТАП 2: ТАЙНА ЗОМБИ-ЯИЦ",
         description: "Зомби-куры снесли яйца со странными символами! Найдите все яйца и расшифруйте код.",
-        task: "🔍 Найдите 5 яиц с символами в курятнике",
-        hint: "💡 Символы: Ω † ∞ ¤ §",
+        task: "Найдите 5 яиц с символами в курятнике",
+        hint: "Символы: Ω † ∞ ¤ § (введите их подряд)",
+        fact: "Куры могут запомнить до 100 разных лиц!",
         answer: "Ω†∞¤§",
         points: 150
+    },
+    3: {
+        title: "🦢 ЭТАП 3: ГУСИНОЕ СЕЛФИ",
+        description: "Пройдите через территорию гусей-охранников и сделайте крутое селфи!",
+        task: "Сделайте селфи с гусями и поделитесь в соцсетях",
+        hint: "Используйте хэштег #ЗомбиФерма2024",
+        fact: "Гуси образуют пары на всю жизнь!",
+        answer: "ГУСИ_ОХРАННИКИ",
+        points: 200
+    },
+    4: {
+        title: "🦙 ЭТАП 4: ТАЙНА ЛАМЫ",
+        description: "Лама на ферме знает секрет! Но она говорит только на языке жестов.",
+        task: "Расшифруйте жесты ламы и найдите код",
+        hint: "Код: 4 цифры (год основания фермы)",
+        fact: "Ламы используются как сторожевые животные для охраны овец!",
+        answer: "1998",
+        points: 250
+    },
+    5: {
+        title: "🦘 ЭТАП 5: ПРЫГАЮЩИЙ КЕНГУРУ",
+        description: "Кенгуру-зомби прыгает по ферме и оставляет следы! Проследите за ним.",
+        task: "Найдите все места, где прыгал кенгуру",
+        hint: "Количество прыжков = код",
+        fact: "Кенгуру не могут двигать задними лапами независимо друг от друга!",
+        answer: "7",
+        points: 300
+    },
+    6: {
+        title: "🐄 ЭТАП 6: МОЛОКО ЗОМБИ",
+        description: "Коровы дают зараженное молоко! Найдите антидот в молочном цеху.",
+        task: "Решите головоломку с бутылками молока",
+        hint: "Код: цвет бутылки + номер",
+        fact: "Корова может узнать до 50 других коров!",
+        answer: "ЗЕЛЕНЫЙ7",
+        points: 350
+    },
+    7: {
+        title: "🐑 ЭТАП 7: ОВЕЧЬЯ ШЕРСТЬ",
+        description: "Овцы стали агрессивными! Успокойте их, найдя правильный подход.",
+        task: "Посчитайте количество белых и черных овец",
+        hint: "Код: белые_черные (например: 12_8)",
+        fact: "Овцы имеют поле зрения 270 градусов!",
+        answer: "15_10",
+        points: 400
+    },
+    8: {
+        title: "📱 ЭТАП 8: ТЕХНОЛОГИИ",
+        description: "Найдите планшет с данными эксперимента! Взломайте пароль.",
+        task: "Решите цифровую головоломку",
+        hint: "Пароль: дата эксперимента (дд.мм.гггг)",
+        fact: "Первые смартфоны появились в 1992 году!",
+        answer: "15.03.2024",
+        points: 450
+    },
+    9: {
+        title: "🧩 ЭТАП 9: ПАЗЛ ЛАБОРАТОРИИ",
+        description: "Соберите пазл с планом лаборатории! Найдите скрытое сообщение.",
+        task: "Соберите пазл из 12 частей",
+        hint: "Код: первые буквы слов на пазле",
+        fact: "Самый большой пазл в мире состоит из 551,232 деталей!",
+        answer: "СПАСИТЕФЕРМУ",
+        points: 500
+    },
+    10: {
+        title: "🔦 ЭТАП 10: НОЧНАЯ ОХОТА",
+        description: "Ночью зомби-животные активнее! Найдите их с фонариком.",
+        task: "Найдите 5 спрятанных предметов ночью",
+        hint: "Код: количество найденных предметов",
+        fact: "Многие животные видят в темноте в 6 раз лучше человека!",
+        answer: "5",
+        points: 550
+    },
+    11: {
+        title: "🧪 ЭТАП 11: ЛАБОРАТОРИЯ",
+        description: "Проберитесь в лабораторию Агриуса! Создайте антидот.",
+        task: "Смешайте правильные ингредиенты",
+        hint: "Код: формула антидота (например: A+B+C)",
+        fact: "Первый антибиотик был открыт в 1928 году!",
+        answer: "ЗЕЛЕНЬ+КРАСНЫЙ+СИНИЙ",
+        points: 600
+    },
+    12: {
+        title: "🎭 ЭТАП 12: МАСКАРАД",
+        description: "Агриус спрятался среди зомби! Найдите его по особенностям.",
+        task: "Найдите отличия у настоящего Агриуса",
+        hint: "Код: количество отличий",
+        fact: "Искусство маскировки существует тысячи лет!",
+        answer: "3",
+        points: 650
+    },
+    13: {
+        title: "🏆 ЭТАП 13: ФИНАЛЬНАЯ БИТВА",
+        description: "Последнее противостояние с Агриусом! Используйте антидот.",
+        task: "Введите финальный код для спасения фермы",
+        hint: "Код: общее количество животных на ферме",
+        fact: "Ферма спасена! Вы стали героем!",
+        answer: "42",
+        points: 1000
     }
-    // Добавьте остальные этапы...
 };
-
-// Инициализация при загрузке
-document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
-});
-
-function initializeApp() {
-    // Инициализируем Telegram Web App
-    tg.expand();
-    tg.enableClosingConfirmation();
-    
-    // Настройка главной кнопки Telegram
-    tg.MainButton.setText("СОХРАНИТЬ ПРОГРЕСС");
-    tg.MainButton.hide();
-    
-    // Показываем главный экран после загрузки
-    setTimeout(() => {
-        hideScreen('loading');
-        showScreen('main');
-    }, 2000);
-    
-    // Назначаем обработчики событий
-    setupEventListeners();
-}
-
-function setupEventListeners() {
-    // Кнопки главного меню
-    document.getElementById('start-btn').addEventListener('click', startGame);
-    document.getElementById('how-to-play-btn').addEventListener('click', showInstructions);
-    
-    // Игровые кнопки
-    document.getElementById('back-btn').addEventListener('click', showMainMenu);
-    document.getElementById('submit-answer').addEventListener('click', checkAnswer);
-    document.getElementById('back-from-instructions').addEventListener('click', showMainMenu);
-    
-    // Enter для отправки ответа
-    document.getElementById('answer-input').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') checkAnswer();
-    });
-}
-
-// Управление экранами
-function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.remove('active');
-    });
-    document.getElementById(screenId).classList.add('active', 'fade-in');
-}
-
-function hideScreen(screenId) {
-    document.getElementById(screenId).classList.remove('active');
-}
-
-function showMainMenu() {
-    if (gameState.isGameActive) {
-        stopGame();
-    }
-    showScreen('main');
-    updateStats();
-}
-
-function showInstructions() {
-    showScreen('instructions');
-}
-
-// Игровая логика
-function startGame() {
-    gameState = {
-        currentStage: 1,
-        score: 0,
-        timeLeft: 2700,
-        isGameActive: true
-    };
-    
-    startTimer();
-    showScreen('game');
-    loadStage(1);
-    updateStats();
-}
-
-function stopGame() {
-    gameState.isGameActive = false;
-    clearInterval(gameState.timerInterval);
-    tg.MainButton.hide();
-}
-
-function loadStage(stageNumber) {
-    const stage = stages[stageNumber];
-    if (!stage) {
-        endGame();
-        return;
-    }
-    
-    const stageContent = document.getElementById('stage-content');
-    stageContent.innerHTML = `
-        <div class="stage-header">
-            <h3>${stage.title}</h3>
-            <p>${stage.description}</p>
-        </div>
-        
-        <div class="stage-task">
-            <h4>🎯 Задача:</h4>
-            <p>${stage.task}</p>
-        </div>
-        
-        <div class="stage-hint">
-            <h4>💡 Подсказка:</h4>
-            <p>${stage.hint}</p>
-        </div>
-    `;
-    
-    document.getElementById('current-stage').textContent = stageNumber;
-    document.getElementById('answer-input').value = '';
-    document.getElementById('answer-input').focus();
-}
-
-function checkAnswer() {
-    const input = document.getElementById('answer-input');
-    const userAnswer = input.value.trim().toUpperCase();
-    const currentStage = stages[gameState.currentStage];
-    
-    if (!userAnswer) {
-        showMessage('Введите ответ!', 'error');
-        return;
-    }
-    
-    if (userAnswer === currentStage.answer) {
-        // Правильный ответ
-        gameState.score += currentStage.points;
-        gameState.currentStage++;
-        
-        showMessage('✅ Правильно! Переходим к следующему этапу!', 'success');
-        
-        setTimeout(() => {
-            if (gameState.currentStage <= Object.keys(stages).length) {
-                loadStage(gameState.currentStage);
-            } else {
-                endGame();
-            }
-            updateStats();
-        }, 1500);
-        
-    } else {
-        // Неправильный ответ
-        showMessage('❌ Неправильно! Попробуйте еще раз.', 'error');
-        input.value = '';
-        input.focus();
-    }
-}
-
-function showMessage(text, type) {
-    const message = document.createElement('div');
-    message.className = `message ${type}`;
-    message.textContent = text;
-    message.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding: 20px 30px;
-        border-radius: 10px;
-        z-index: 1000;
-        font-weight: bold;
-        text-align: center;
-        min-width: 250px;
-    `;
-    
-    document.body.appendChild(message);
-    
-    setTimeout(() => {
-        message.remove();
-    }, 2000);
-}
-
-function startTimer() {
-    clearInterval(gameState.timerInterval);
-    gameState.timerInterval = setInterval(() => {
-        if (gameState.isGameActive) {
-            gameState.timeLeft--;
-            updateTimerDisplay();
-            
-            if (gameState.timeLeft <= 0) {
-                endGame();
-            }
-        }
-    }, 1000);
-}
-
-function updateTimerDisplay() {
-    const minutes = Math.floor(gameState.timeLeft / 60);
-    const seconds = gameState.timeLeft % 60;
-    document.getElementById('time').textContent = 
-        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-}
-
-function updateStats() {
-    document.getElementById('stage-counter').textContent = 
-        `${gameState.currentStage - 1}/${Object.keys(stages).length}`;
-    document.getElementById('score-counter').textContent = gameState.score;
-}
-
-function endGame() {
-    stopGame();
-    
-    const stageContent = document.getElementById('stage-content');
-    stageContent.innerHTML = `
-        <div class="game-complete">
-            <h2>🎉 Поздравляем!</h2>
-            <p>Вы завершили игру и спасли ферму!</p>
-            <div class="final-stats">
-                <p>🏆 Набрано очков: <strong>${gameState.score}</strong></p>
-                <p>🎯 Пройдено этапов: <strong>${gameState.currentStage - 1}/${Object.keys(stages).length}</strong></p>
-            </div>
-            <button onclick="showMainMenu()" class="btn-primary">В ГЛАВНОЕ МЕНЮ</button>
-        </div>
-    `;
-    
-    // Отправляем данные в Telegram
-    tg.sendData(JSON.stringify({
-        action: 'game_complete',
-        score: gameState.score,
-        stages: gameState.currentStage - 1
-    }));
-}
-
-// Экспортируем функции для глобального использования
-window.showMainMenu = showMainMenu;
