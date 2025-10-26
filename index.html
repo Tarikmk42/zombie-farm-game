@@ -1166,17 +1166,6 @@ body {
         </div>
     </div>
 
-    <!-- Звуковые эффекты -->
-    <audio id="click-sound" preload="auto">
-        <source src="assets/sounds/click.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="success-sound" preload="auto">
-        <source src="assets/sounds/success.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="error-sound" preload="auto">
-        <source src="assets/sounds/error.mp3" type="audio/mpeg">
-    </audio>
-
     <script>
 // ===== КОНФИГУРАЦИЯ ИГРЫ =====
 const CONFIG = {
@@ -1485,6 +1474,9 @@ function showGameScreen() {
 function showPauseScreen() {
     if (!gameState.isGameActive) return;
     
+    // Останавливаем таймер при паузе
+    clearInterval(gameState.timerInterval);
+    
     // Обновляем статистику на экране паузы
     document.getElementById('pause-stage').textContent = 
         `${gameState.currentStage}/${CONFIG.TOTAL_STAGES}`;
@@ -1522,12 +1514,15 @@ function startGame() {
             playerName: gameState.playerName,
             playerEmoji: gameState.playerEmoji
         };
+    } else {
+        // Если загружаем сохраненную игру, устанавливаем флаг активности
+        gameState.isGameActive = true;
     }
     
     // Запуск таймера
     startTimer();
     
-    // Загрузка первого этапа
+    // Загрузка текущего этапа
     loadStage(gameState.currentStage);
     
     // Обновление интерфейса
@@ -1684,6 +1679,7 @@ function handleWrongAnswer() {
     }
     
     updateGameUI();
+    saveGameProgress();
 }
 
 function useHint() {
@@ -1758,6 +1754,9 @@ function endGame(isVictory) {
 // ===== ТАЙМЕР =====
 function startTimer() {
     clearInterval(gameState.timerInterval);
+    
+    // Сразу обновляем отображение таймера
+    updateTimerDisplay();
     
     gameState.timerInterval = setInterval(() => {
         if (gameState.isGameActive && gameState.timeLeft > 0) {
@@ -1991,7 +1990,12 @@ function setupEventListeners() {
     }
     
     // Экран паузы
-    document.getElementById('resume-game')?.addEventListener('click', () => showScreen('game-screen'));
+    document.getElementById('resume-game')?.addEventListener('click', () => {
+        // Возобновляем игру
+        gameState.isGameActive = true;
+        startTimer();
+        showScreen('game-screen');
+    });
     document.getElementById('restart-game')?.addEventListener('click', () => {
         if (confirm('Начать игру заново?')) {
             localStorage.removeItem('zombieFarmProgress');
