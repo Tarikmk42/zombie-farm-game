@@ -644,6 +644,19 @@ body {
     margin: 1rem 0;
 }
 
+.screenshot-notice {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--warning-color);
+}
+
+.screenshot-notice p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+}
+
 /* === МОДАЛЬНЫЕ ОКНА И УВЕДОМЛЕНИЯ === */
 .modal {
     position: fixed;
